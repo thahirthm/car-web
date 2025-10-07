@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     const vehicleId = searchParams.get('vehicleId')
     const driverId = searchParams.get('driverId')
 
-    let whereClause: any = {}
+    const whereClause: Record<string, unknown> = {}
 
     // If driver, only show their trips
     if (session.user.role === 'DRIVER') {

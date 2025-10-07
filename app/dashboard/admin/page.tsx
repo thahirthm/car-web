@@ -179,10 +179,10 @@ export default function AdminDashboard() {
               { key: 'trips', label: 'Trips', icon: '📊' },
               { key: 'vehicles', label: 'Vehicles', icon: '🚗' },
               { key: 'users', label: 'Users', icon: '👥' }
-            ].map((tab, index) => (
+            ].map((tab) => (
               <button
                 key={tab.key}
-                onClick={() => setActiveTab(tab.key as any)}
+                onClick={() => setActiveTab(tab.key as 'trips' | 'vehicles' | 'users')}
                 className={`flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-200 hover:scale-105 active:scale-95 animate-fade-in ${
                   activeTab === tab.key
                     ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/25'
@@ -286,7 +286,7 @@ export default function AdminDashboard() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/10">
-                    {filteredTrips.map((trip, index) => (
+                    {filteredTrips.map((trip) => (
                       <tr
                         key={trip.id}
                         className="hover:bg-white/5 transition-colors duration-200 animate-fade-in"

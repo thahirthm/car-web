@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(vehicle, { status: 201 })
   } catch (error) {
     console.error('Error creating vehicle:', error)
-    if (error.code === 'P2002') {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
       return NextResponse.json({ error: 'Vehicle number already exists' }, { status: 400 })
     }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

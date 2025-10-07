@@ -201,7 +201,7 @@ export default function DriverDashboard() {
         <div className="px-4 py-6 sm:px-0 animate-fade-in">
           <h2 className="text-2xl font-bold text-white mb-6 tracking-tight">Available Vehicles</h2>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {vehicles.map((vehicle, index) => (
+            {vehicles.map((vehicle) => (
               <div key={vehicle.id} className="animate-scale-in">
                 <VehicleCard
                   vehicle={vehicle}
@@ -220,7 +220,7 @@ export default function DriverDashboard() {
           <h2 className="text-2xl font-bold text-white mb-6 tracking-tight">Recent Trips</h2>
           <div className="glass rounded-2xl overflow-hidden">
             <div className="divide-y divide-white/10">
-              {trips.slice(0, 5).map((trip, index) => (
+              {trips.slice(0, 5).map((trip) => (
                 <div
                   key={trip.id}
                   className="px-6 py-4 hover:bg-white/5 transition-colors duration-200 animate-slide-in"

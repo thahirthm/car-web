@@ -1,5 +1,30 @@
 // Utility functions for the application
 
+// Type definitions for utility functions
+interface TripData {
+  id: number
+  startKm: number
+  endKm?: number
+  distance?: number
+  startTime: string
+  endTime?: string
+  status: string
+  driver: { id: number; name: string }
+  vehicle: { vehicleNo: string; id: number }
+}
+
+interface VehicleData {
+  id: number
+  vehicleNo: string
+  status: string
+}
+
+interface UserData {
+  id: number
+  name: string
+  role: string
+}
+
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
 }
@@ -15,7 +40,7 @@ export function formatNumber(num: number): string {
   return new Intl.NumberFormat('en-US').format(num)
 }
 
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -26,7 +51,7 @@ export function debounce<T extends (...args: any[]) => any>(
   }
 }
 
-export function exportToCSV(data: any[], filename: string): void {
+export function exportToCSV(data: Record<string, unknown>[], filename: string): void {
   if (data.length === 0) return
 
   const headers = Object.keys(data[0])
@@ -58,7 +83,7 @@ export function exportToCSV(data: any[], filename: string): void {
   }
 }
 
-export function generateReportData(trips: any[]) {
+export function generateReportData(trips: TripData[]) {
   return trips.map(trip => ({
     'Trip ID': trip.id,
     'Driver': trip.driver.name,
@@ -75,7 +100,7 @@ export function generateReportData(trips: any[]) {
   }))
 }
 
-export function calculateTripStats(trips: any[]) {
+export function calculateTripStats(trips: TripData[]) {
   const completedTrips = trips.filter(trip => trip.status === 'COMPLETED')
   const runningTrips = trips.filter(trip => trip.status === 'RUNNING')
   
@@ -91,7 +116,7 @@ export function calculateTripStats(trips: any[]) {
   }
 }
 
-export function getVehicleStats(vehicles: any[], trips: any[]) {
+export function getVehicleStats(vehicles: VehicleData[], trips: TripData[]) {
   return vehicles.map(vehicle => {
     const vehicleTrips = trips.filter(trip => trip.vehicle.id === vehicle.id)
     const completedTrips = vehicleTrips.filter(trip => trip.status === 'COMPLETED')
@@ -106,7 +131,7 @@ export function getVehicleStats(vehicles: any[], trips: any[]) {
   })
 }
 
-export function getDriverStats(users: any[], trips: any[]) {
+export function getDriverStats(users: UserData[], trips: TripData[]) {
   const drivers = users.filter(user => user.role === 'DRIVER')
   
   return drivers.map(driver => {
@@ -124,18 +149,18 @@ export function getDriverStats(users: any[], trips: any[]) {
   })
 }
 
-export function filterTrips(trips: any[], filters: any) {
+export function filterTrips(trips: TripData[], filters: Record<string, unknown>) {
   return trips.filter(trip => {
-    if (filters.vehicleId && trip.vehicle.id !== parseInt(filters.vehicleId)) return false
-    if (filters.driverId && trip.driver.id !== parseInt(filters.driverId)) return false
+    if (filters.vehicleId && trip.vehicle.id !== parseInt(filters.vehicleId as string)) return false
+    if (filters.driverId && trip.driver.id !== parseInt(filters.driverId as string)) return false
     if (filters.status && trip.status !== filters.status) return false
-    if (filters.dateFrom && new Date(trip.startTime) < new Date(filters.dateFrom)) return false
-    if (filters.dateTo && new Date(trip.startTime) > new Date(filters.dateTo)) return false
+    if (filters.dateFrom && new Date(trip.startTime) < new Date(filters.dateFrom as string)) return false
+    if (filters.dateTo && new Date(trip.startTime) > new Date(filters.dateTo as string)) return false
     return true
   })
 }
 
-export function sortTrips(trips: any[], sortBy: string, sortOrder: 'asc' | 'desc' = 'desc') {
+export function sortTrips(trips: TripData[], sortBy: string, sortOrder: 'asc' | 'desc' = 'desc') {
   return [...trips].sort((a, b) => {
     let aValue, bValue
     

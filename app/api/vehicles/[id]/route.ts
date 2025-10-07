@@ -36,11 +36,13 @@ export async function PUT(
     return NextResponse.json(vehicle)
   } catch (error) {
     console.error('Error updating vehicle:', error)
-    if (error.code === 'P2025') {
-      return NextResponse.json({ error: 'Vehicle not found' }, { status: 404 })
-    }
-    if (error.code === 'P2002') {
-      return NextResponse.json({ error: 'Vehicle number already exists' }, { status: 400 })
+    if (error && typeof error === 'object' && 'code' in error) {
+      if (error.code === 'P2025') {
+        return NextResponse.json({ error: 'Vehicle not found' }, { status: 404 })
+      }
+      if (error.code === 'P2002') {
+        return NextResponse.json({ error: 'Vehicle number already exists' }, { status: 400 })
+      }
     }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
@@ -81,7 +83,7 @@ export async function DELETE(
     return NextResponse.json({ message: 'Vehicle deleted successfully' })
   } catch (error) {
     console.error('Error deleting vehicle:', error)
-    if (error.code === 'P2025') {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2025') {
       return NextResponse.json({ error: 'Vehicle not found' }, { status: 404 })
     }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
