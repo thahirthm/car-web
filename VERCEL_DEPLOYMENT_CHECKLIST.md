@@ -29,20 +29,25 @@
 
 ---
 
-## 🗄️ **Step 3: Add Database (Vercel Postgres)**
+## 🗄️ **Step 3: Add Database (Supabase PostgreSQL)**
 
-### 3.1 Create Database
-1. In your Vercel project dashboard, go to **"Storage"** tab
-2. Click **"Create Database"**
-3. Select **"Postgres"**
-4. Database name: `vehicle-tracker-db` (or any name you prefer)
-5. Region: Choose closest to your users
-6. Click **"Create"**
+### 3.1 Create Supabase Project
+1. Go to **[supabase.com](https://supabase.com)**
+2. Click **"New Project"**
+3. Choose your organization (create one if needed)
+4. **Project Details**:
+   - Name: `vehicle-km-tracker`
+   - Database Password: Generate a strong password (save it!)
+   - Region: Choose closest to your users
+5. Click **"Create new project"**
+6. Wait 2-3 minutes for setup to complete
 
 ### 3.2 Get Database URL
-1. After creation, go to **"Settings"** tab in your database
-2. Copy the **"DATABASE_URL"** connection string
-3. It will look like: `postgresql://username:password@host:5432/database`
+1. In your Supabase project, go to **Settings** → **Database**
+2. Scroll down to **"Connection string"**
+3. Copy the **"URI"** connection string
+4. Replace `[YOUR-PASSWORD]` with your actual database password
+5. It will look like: `postgresql://postgres:[YOUR-PASSWORD]@db.xxx.supabase.co:5432/postgres`
 
 ---
 
@@ -54,7 +59,7 @@
 
 | Variable | Value | Environment |
 |----------|-------|-------------|
-| `DATABASE_URL` | `postgresql://...` (from Step 3.2) | Production, Preview, Development |
+| `DATABASE_URL` | `postgresql://postgres:[password]@db.xxx.supabase.co:5432/postgres` | Production, Preview, Development |
 | `NEXTAUTH_URL` | `https://your-app-name.vercel.app` | Production, Preview |
 | `NEXTAUTH_SECRET` | Generate secure secret (see below) | Production, Preview, Development |
 

@@ -1,29 +1,27 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
 
 export async function GET() {
   try {
-    // Test database connection
-    const userCount = await prisma.user.count()
-    const vehicleCount = await prisma.vehicle.count()
-    const tripCount = await prisma.trip.count()
-    
+    // Check if environment variables are available
+    const databaseUrl = process.env.DATABASE_URL
+    const nextAuthUrl = process.env.NEXTAUTH_URL
+    const nextAuthSecret = process.env.NEXTAUTH_SECRET
+
     return NextResponse.json({
       status: 'success',
-      message: 'Database connection working',
+      message: 'Environment check',
       data: {
-        users: userCount,
-        vehicles: vehicleCount,
-        trips: tripCount
+        DATABASE_URL: databaseUrl ? 'Set' : 'Missing',
+        NEXTAUTH_URL: nextAuthUrl ? 'Set' : 'Missing',
+        NEXTAUTH_SECRET: nextAuthSecret ? 'Set' : 'Missing',
+        NODE_ENV: process.env.NODE_ENV
       }
     })
   } catch (error) {
-    console.error('Database test error:', error)
+    console.error('Environment test error:', error)
     return NextResponse.json({
       status: 'error',
-      message: 'Database connection failed',
+      message: 'Environment check failed',
       error: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
   }
