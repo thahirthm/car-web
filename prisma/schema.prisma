@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for both drivers and admins
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  username  String   @unique
+  password  String
+  role      Role
+  trips     Trip[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Vehicle model
+model Vehicle {
+  id          Int           @id @default(autoincrement())
+  vehicleNo   String        @unique
+  currentKm   Float
+  status      VehicleStatus @default(AVAILABLE)
+  trips       Trip[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+// Trip model
+model Trip {
+  id         Int        @id @default(autoincrement())
+  driver     User       @relation(fields: [driverId], references: [id])
+  driverId   Int
+  vehicle    Vehicle    @relation(fields: [vehicleId], references: [id])
+  vehicleId  Int
+  startKm    Float
+  endKm      Float?
+  distance   Float?
+  status     TripStatus @default(RUNNING)
+  startTime  DateTime   @default(now())
+  endTime    DateTime?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+// Enums
+enum Role {
+  ADMIN
+  DRIVER
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  RUNNING
+}
+
+enum TripStatus {
+  RUNNING
+  COMPLETED
+}
